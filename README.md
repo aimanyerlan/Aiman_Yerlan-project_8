@@ -1,3 +1,85 @@
+# **МАҢЫЗДЫ: СТУДЕНТТЕРГЕ АРНАЛҒАН ТАПСЫРМАЛАР!**
+
+Дағдыларды бекітуге арналған практикалық тапсырмалар. Қателерден қорықпа, бұл оқу процесінің бір бөлігі!
+
+---
+
+# **Жоба 8/10: Іздеу және Сүзу**
+
+Тауарлар каталогын имитациялайтын, санаттар бойынша іздеу және сүзу мүмкіндігі бар full-stack қосымшасы.
+
+---
+
+**🚀 Технологиялар**
+
+* **Бэкенд**: FastAPI (опционалды query-параметрлерді өңдеу)
+* **Фронтенд**: Next.js, React (`useEffect` бірнеше тәуелділіктермен)
+
+**✨ Функционал**
+
+* Бэкенд сүзудің барлық логикасын орындайтын бірыңғай `/api/products` эндпоинтін ұсынады.
+* Фронтенд сүзгілерді (іздеу және ашылмалы тізім) көрсетеді.
+* Сүзгілердің кез келгені өзгерген кезде, фронтенд автоматты түрде жаңартылған тауарлар тізімін сұрайды және көрсетеді.
+
+# **Сенің міндетің:**
+
+## Сенің тапсырмаң:
+
+# 1. **Сұрыптауды қосу:**
+> * ## **Бэкенд**: Опционалды `sort` query-параметрін қос (мысалы, `?sort=price_asc` немесе `?sort=price_desc`). Тізімді жібермес бұрын сұрыптау логикасын іске қос.
+> * ## **Фронтенд**: Сұрыптау опцияларын таңдау үшін ашылмалы тізімді қос (Бағасы бойынша: алдымен арзан; Бағасы бойынша: алдымен қымбат).
+
+# 2. **Баға диапазоны бойынша сүзу:**
+> * ## **Бэкенд**: `min_price` және `max_price` параметрлерін қос.
+> * ## **Фронтенд**: Минималды және максималды бағаны енгізу үшін екі өріс қос.
+
+# 3. **Іздеуге арналған Debouncing (күрделі):**
+> * ## Қазір API-сұраныс іздеу өрісіндегі әрбір пернені басқанда жіберіледі. Бұл тиімсіз.
+> * ## **Фронтенд**: "Debouncing" механизмін іске қос. Сұраныс пайдаланушы теруді ~300-500 миллисекундқа тоқтатқаннан кейін ғана жіберілуі керек. Ол үшін `setTimeout` және `clearTimeout` ішінде `useEffect` қолдануға болады.
+
+---
+
+# **IMPORTANT: TASKS FOR STUDENTS!**
+
+These are practical assignments to consolidate your skills. Don't be afraid of mistakes; they are part of the learning process!
+
+---
+
+# **Project 8/10: Search and Filtering**
+
+A full-stack application mimicking a product catalog with search and category filtering capabilities.
+
+---
+
+**🚀 Technologies**
+
+* **Backend**: FastAPI (handling optional query parameters)
+* **Frontend**: Next.js, React (`useEffect` with multiple dependencies)
+
+**✨ Functionality**
+
+* The backend provides a single `/api/products` endpoint that performs all filtering logic.
+* The frontend displays filters (search and dropdown list).
+* When any filter changes, the frontend automatically requests and displays an updated list of products.
+
+# **Your Task:**
+
+## Your Mission:
+
+# 1. **Add Sorting:**
+> * ## **Backend**: Add an optional `sort` query parameter (e.g., `?sort=price_asc` or `?sort=price_desc`). Implement the sorting logic for the list before sending.
+> * ## **Frontend**: Add a dropdown list for selecting sorting options (By price: cheapest first; By price: most expensive first).
+
+# 2. **Price Range Filter:**
+> * ## **Backend**: Add `min_price` and `max_price` parameters.
+> * ## **Frontend**: Add two input fields for entering minimum and maximum prices.
+
+# 3. **Debouncing for Search (Advanced):**
+> * ## Currently, an API request is sent on every keystroke in the search field. This is inefficient.
+> * ## **Frontend**: Implement a "debouncing" mechanism. The request should only be sent after the user has stopped typing for ~300-500 milliseconds. This can be achieved using `setTimeout` and `clearTimeout` within `useEffect`.
+
+---
+
 # **ВАЖНО: ЗАДАЧИ ДЛЯ СТУДЕНТОВ!**
 
 Перед тобой практические задания для закрепления навыков. Не бойся ошибок, это часть обучения!
