@@ -13,18 +13,18 @@ interface Product {
 const API_URL = 'http://localhost:8000/api';
 
 export default function Home() {
-  // Состояния для данных
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [sortOption, setSortOption] = useState('');
 
-  // Состояния для фильтров
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
-  // Состояние загрузки
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Загрузка категорий один раз при монтировании компонента
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -37,30 +37,50 @@ export default function Home() {
     fetchCategories();
   }, []);
 
-  // Основной эффект для загрузки продуктов при изменении фильтров
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500); 
+  
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+  
+
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // Формируем параметры запроса
         const params = new URLSearchParams();
-        if (searchTerm) {
-          params.append('search', searchTerm);
+  
+        if (debouncedSearchTerm) {
+          params.append('search', debouncedSearchTerm);
         }
+  
         if (selectedCategory && selectedCategory !== 'All') {
           params.append('category', selectedCategory);
         }
-
+        if (sortOption) {
+          params.append('sort', sortOption);
+        }
+        if (minPrice) {
+          params.append('min_price', minPrice);
+        }
+        if (maxPrice) {
+          params.append('max_price', maxPrice);
+        }
+  
         const response = await axios.get(`${API_URL}/products?${params.toString()}`);
         setProducts(response.data);
-      } catch (error) {
-        console.error('Failed to fetch products:', error);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
+  
     fetchProducts();
-  }, [searchTerm, selectedCategory]); // Этот эффект перезапустится при изменении любого из этих состояний
+  }, [debouncedSearchTerm, selectedCategory, sortOption, minPrice, maxPrice]); 
+  
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -71,7 +91,7 @@ export default function Home() {
       </header>
 
       <main className="container mx-auto p-4">
-        {/* Панель фильтров */}
+        {/* Фильтры */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-white p-4 rounded-lg shadow">
           <input
             type="text"
@@ -80,18 +100,42 @@ export default function Home() {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
             className="p-2 border rounded-md w-full"
           />
+          <input
+            type="number"
+            placeholder="Минимальная цена"
+            value={minPrice}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setMinPrice(e.target.value)}
+            className="p-2 border rounded-md w-full"
+            min={0}
+          />
+          <input
+            type="number"
+            placeholder="Максимальная цена"
+            value={maxPrice}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setMaxPrice(e.target.value)}
+            className="p-2 border rounded-md w-full"
+            min={0}
+          />
           <select
             value={selectedCategory}
             onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value)}
             className="p-2 border rounded-md w-full"
           >
-            {categories.map(cat => (
+            {categories.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
+          <select
+            value={sortOption}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setSortOption(e.target.value)}
+            className="p-2 border rounded-md w-full"
+          >
+            <option value="">Без сортировки</option>
+            <option value="price_asc">Цена: по возрастанию</option>
+            <option value="price_desc">Цена: по убыванию</option>
+          </select>
         </div>
 
-        {/* Сетка товаров */}
         {loading ? (
           <p className="text-center">Загрузка товаров...</p>
         ) : (

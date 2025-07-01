@@ -31,7 +31,12 @@ class Product(BaseModel):
 
 # --- Эндпоинты API ---
 @app.get("/api/products", response_model=List[Product])
-async def filter_products(search: Optional[str] = None, category: Optional[str] = None):
+async def filter_products(
+    search: Optional[str] = None, 
+    category: Optional[str] = None, 
+    sort: Optional[str] =None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] =None):
     """Фильтрует продукты по поисковому запросу и/или категории."""
     filtered_products = PRODUCTS_DB
 
@@ -42,6 +47,17 @@ async def filter_products(search: Optional[str] = None, category: Optional[str] 
     # Фильтрация по поисковому запросу
     if search:
         filtered_products = [p for p in filtered_products if search.lower() in p["name"].lower()]
+
+    if min_price is not None:
+        filtered_products = [p for p in filtered_products if p["price"] >= min_price]
+    
+    if max_price is not None:
+        filtered_products = [p for p in filtered_products if p["price"] <= max_price]
+    
+    if sort == "price_asc":
+        filtered_products = sorted(filtered_products, key=lambda p: p["price"])
+    elif sort == "price_desc":
+        filtered_products = sorted(filtered_products, key=lambda p: p["price"], reverse=True)
 
     return filtered_products
 
